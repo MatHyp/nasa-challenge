@@ -15,7 +15,7 @@ def get_air_quality(lat: float, lon: float) -> dict | None:
         hourly_data = data['hourly']
 
         formatted_data = {
-            "pm2.5": hourly_data['pm2_5'][0],
+            "pm25": hourly_data['pm2_5'][0],
             "pm10": hourly_data['pm10'][0],
             "no2": hourly_data['nitrogen_dioxide'][0],
             "so2": hourly_data['sulphur_dioxide'][0],
