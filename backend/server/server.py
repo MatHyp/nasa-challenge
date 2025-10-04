@@ -12,13 +12,11 @@ api = Api(
     doc='/'
 )
 
-
 ns = api.namespace('', description='Operacje predykcji smogu')
 
 location_parser = api.parser()
 location_parser.add_argument('latitude', type=float, required=True, help='Szerokość geograficzna', location='args')
 location_parser.add_argument('longitude', type=float, required=True, help='Długość geograficzna', location='args')
-
 
 @ns.route('/air-quality')
 class CurrentAirQuality(Resource):

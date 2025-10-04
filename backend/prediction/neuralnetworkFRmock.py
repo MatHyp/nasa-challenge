@@ -47,6 +47,15 @@ AQI_CATEGORIES = {
     (301, 500): "Niebezpieczna",
 }
 
+AQI_COMMENTS = {
+    (0, 50): "Jakość powietrza jest zadowalająca. Możesz bez obaw spędzać czas na zewnątrz.",
+    (51, 100): "Jakość powietrza jest akceptowalna. Osoby bardzo wrażliwe powinny rozważyć ograniczenie dłuższego wysiłku na zewnątrz.",
+    (101, 150): "Osoby z grup wrażliwych (dzieci, osoby starsze, osoby z chorobami serca i płuc) mogą odczuwać negatywne skutki zdrowotne. Powinny unikać długotrwałej aktywności na zewnątrz.",
+    (151, 200): "Każdy może zacząć odczuwać skutki zdrowotne. Grupy wrażliwe mogą doświadczać poważniejszych problemów. Ogranicz wysiłek na świeżym powietrzu.",
+    (201, 300): "Ostrzeżenie zdrowotne: każdy może doświadczyć poważniejszych skutków zdrowotnych. Zaleca się unikanie wszelkiej aktywności na zewnątrz.",
+    (301, 500): "Zagrożenie dla zdrowia: cała populacja jest narażona na poważne skutki zdrowotne. Pozostań w domu i ogranicz aktywność do minimum.",
+}
+
 def air_quality(latitude: float, longitude: float) :
     result = get_air_quality(latitude, longitude)
     return result
@@ -73,6 +82,11 @@ def get_aqi_category(index_value: int) -> str:
             return category
     return "Poza skalą"
 
+def get_aqi_comment(index_value: int) -> str:
+    for (low, high), category in AQI_COMMENTS.items():
+        if low <= index_value <= high:
+            return category
+    return "Poza skalą"
 
 def aqi(latitude: float, longitude: float) -> dict:
     air_data = air_quality(latitude, longitude)
@@ -91,10 +105,12 @@ def aqi(latitude: float, longitude: float) -> dict:
     final_aqi = sub_indices[dominant_pollutant]
 
     category = get_aqi_category(final_aqi)
+    comment = get_aqi_comment(final_aqi)
 
     return {
         "aqi": final_aqi,
         "category": category,
+        "comment": comment,
         "dominant_pollutant": dominant_pollutant,
     }
 
