@@ -1,11 +1,17 @@
-import logo from "./logo.svg";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MapView from "./components/MapView";
+import LocationDetails from "./components/LocationDetails";
 import "./App.css";
-import AirQualityApp from "./components/AirQualityApp";
+
 function App() {
   return (
-    <div className="app">
-      <AirQualityApp />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<MapView />} />
+        <Route path="/details/:lat/:lng" element={<LocationDetails />} />
+      </Routes>
+    </Router>
   );
 }
 
