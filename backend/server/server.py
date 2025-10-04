@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_restx import Api, Resource, fields
-from prediction.neuralnetworkFRmock import air_quality, current_weather, aqi
+from prediction.neuralnetworkFRmock import air_quality, current_weather, aqi, generate_heatmap_data
+
 
 app = Flask(__name__)
 
@@ -91,6 +92,28 @@ class AQI(Resource):
             api.abort(404, result.get("error"))
 
         return result
+
+heatmap_parser = api.parser()
+heatmap_parser.add_argument('north', type=float, required=True, help='Współrzędna północna', location='args')
+heatmap_parser.add_argument('south', type=float, required=True, help='Współrzędna południowa', location='args')
+heatmap_parser.add_argument('east', type=float, required=True, help='Współrzędna wschodnia', location='args')
+heatmap_parser.add_argument('west', type=float, required=True, help='Współrzędna zachodnia', location='args')
+
+@ns.route('/heatmap-data')
+class HeatmapData(Resource):
+    @ns.doc('get_heatmap_data')
+    @ns.expect(heatmap_parser)
+    def get(self):
+        """Generuje dane dla heatmapy dla widocznego obszaru mapy"""
+        args = heatmap_parser.parse_args()
+        data = generate_heatmap_data(
+            north=args['north'],
+            south=args['south'],
+            east=args['east'],
+            west=args['west']
+        )
+        return data
+
 
 
 if __name__ == "__main__":

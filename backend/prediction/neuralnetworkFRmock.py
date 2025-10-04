@@ -1,5 +1,5 @@
 import math
-
+import random
 from api_scripts.api_airQuality import get_air_quality
 from api_scripts.api_currentWeather import get_current_weather
 
@@ -113,6 +113,40 @@ def aqi(latitude: float, longitude: float) -> dict:
         "comment": comment,
         "dominant_pollutant": dominant_pollutant,
     }
+
+def generate_heatmap_data(north, south, east, west):
+    """
+    Generuje symulowane dane dla heatmapy w danym obszarze.
+    Pobiera prawdziwy wskaźnik AQI dla centrum mapy, a resztę punktów losuje.
+    """
+    center_lat = (north + south) / 2
+    center_lon = (east + west) / 2
+
+
+    try:
+        center_aqi_data = aqi(center_lat, center_lon)
+        base_aqi = center_aqi_data.get("aqi", 50)
+    except Exception:
+        base_aqi = 50
+
+    heatmap_points = []
+
+    lat_step = (north - south) / 20
+    lon_step = (east - west) / 20
+
+    for i in range(20):
+        for j in range(20):
+            lat = south + i * lat_step
+            lon = west + j * lon_step
+
+            intensity = base_aqi + random.uniform(-15, 15)
+            intensity = max(0, intensity)
+
+            heatmap_points.append([lat, lon, intensity])
+
+    return heatmap_points
+
+
 
 if __name__ == "__main__":
     warsaw_lat = 53.63506668442288
