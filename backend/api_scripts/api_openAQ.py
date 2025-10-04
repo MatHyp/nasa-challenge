@@ -1,5 +1,4 @@
 from openaq import OpenAQ
-from geopy.geocoders import Nominatim
 import json
 import math
 import sys
@@ -65,46 +64,35 @@ def format_location(result, client):
     }
 
 
-def get_city(city_name, myLocation):
-    geolocator = Nominatim(user_agent="getLocation")
+def get_data(latitude, longitude):
     client = OpenAQ(api_key="cd23b0c0a1c6f6ef001ddd3059bc2f6b7ba8fc1979593bf64b3711483ec9fd25")
 
-    city = geolocator.geocode(city_name)
-    if not city:
-        return f"Error: City not found '{city_name}'."
-
     location_response = client.locations.list(
-        coordinates=(city.latitude, city.longitude), radius=10000, limit=100
+        coordinates=(latitude, longitude), radius=10000, limit=100
     )
 
-    if myLocation:
-        try:
-            target_lat = myLocation["latitude"]
-            target_lon = myLocation["longitude"]
-        except KeyError:
-            return "Error"
+    if not location_response.results:
+        return json.dumps({"error": "Nie znaleziono stacji w promieniu 10 km."}, ensure_ascii=False, indent=2)
 
-        min_distance = sys.float_info.max
-        nearest_station = None
-        target_loc = (target_lat, target_lon)
+    min_distance = sys.float_info.max
+    nearest_station = None
+    target_loc = (latitude, longitude)
 
-        for result in location_response.results:
-            station_loc = (result.coordinates.latitude, result.coordinates.longitude)
-            dist = distance(target_loc, station_loc)
-            if dist < min_distance:
-                min_distance = dist
-                nearest_station = result
+    for result in location_response.results:
+        station_loc = (result.coordinates.latitude, result.coordinates.longitude)
+        dist = distance(target_loc, station_loc)
+        if dist < min_distance:
+            min_distance = dist
+            nearest_station = result
 
-        if nearest_station is None:
-            return json.dumps(None, ensure_ascii=False, indent=2)
+    if nearest_station is None:
+        return json.dumps(None, ensure_ascii=False, indent=2)
 
-        return json.dumps(format_location(nearest_station, client), ensure_ascii=False, indent=2)
-
-    else:
-        data = [format_location(result, client) for result in location_response.results]
-        return json.dumps(data, ensure_ascii=False, indent=2)
+    return json.dumps(format_location(nearest_station, client), ensure_ascii=False, indent=2)
 
 
 if __name__ == "__main__":
-    exact_loc = {"latitude": 53.43, "longitude": 14.55}
-    print(get_city("Szczecin", exact_loc))
+    lat = 53.4387
+    lon = 14.5429
+    print(get_data(lat, lon))
+
