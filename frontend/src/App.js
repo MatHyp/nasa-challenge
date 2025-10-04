@@ -9,7 +9,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MapView />} />
-        <Route path="/details/:lat/:lng" element={<LocationDetails />} />
+        {/* <Route path="/details/:lat/:lng" element={<LocationDetails />} /> */}
       </Routes>
     </Router>
   );
