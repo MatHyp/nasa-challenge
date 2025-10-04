@@ -1,10 +1,11 @@
-from prediction.neuralnetworkFRmock import pollution_assessment
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask import Flask, jsonify, request
 
+from prediction.neuralnetworkFRmock import air_quality, current_weather
+
 app = Flask(__name__)
 
-SWAGGER_URL = '/swagger'
+SWAGGER_URL = '/'
 API_URL = '/static/swagger.json'
 
 swaggerui_blueprint = get_swaggerui_blueprint(
@@ -19,7 +20,7 @@ app.register_blueprint(swaggerui_blueprint)
 
 
 @app.route("/predict", methods=["GET"])
-def predict():
+def getPredict():
 
     latitude = request.args.get('latitude', type=float)
     longitude = request.args.get('longitude', type=float)
@@ -30,16 +31,32 @@ def predict():
             "example_usage": "/predict?latitude=50.06&longitude=19.94"
         }), 400
 
-    result = pollution_assessment(latitude=latitude, longitude=longitude)
+    result = air_quality(latitude=latitude, longitude=longitude)
 
     if "error" in result:
         return jsonify(result), 404
 
     return jsonify(result)
 
-@app.route("/")
-def index():
-    return "Serwer predykcji smogu działa! Sprawdź endpoint /predict lub /swagger dla dokumentacji"
+@app.route("/predict", methods=["GET"])
+def getCurrentWeather():
+
+    latitude = request.args.get('latitude', type=float)
+    longitude = request.args.get('longitude', type=float)
+
+    if latitude is None or longitude is None:
+        return jsonify({
+            "error": "Brakujący parametr 'latitude' lub 'longitude'.",
+            "example_usage": "/predict?latitude=50.06&longitude=19.94"
+        }), 400
+
+    result = current_weather(latitude=latitude, longitude=longitude)
+
+    if "error" in result:
+        return jsonify(result), 404
+
+    return jsonify(result)
+
 
 
 if __name__ == "__main__":
