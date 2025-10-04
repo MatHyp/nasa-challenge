@@ -10,21 +10,15 @@ def get_smog_prediction(weather_data: dict, air_quality_data: list):
     aby symulować proces decyzyjny.
     """
     print("--- [MOCK MODELU] Uruchamiam analizę danych wejściowych... ---")
-    time.sleep(0.5)  # Symulacja czasu potrzebnego na obliczenia
+    time.sleep(0.5)
 
-    # ----- PROSTA LOGIKA DECYZYJNA (UDAJĄCA AI) -----
-
-    # Wyciągamy kluczowe parametry z danych wejściowych
-    # Używamy .get() dla bezpieczeństwa, gdyby klucza nie było
     wind_speed = weather_data.get("wind_speed_kmh", 0)
     humidity = weather_data.get("humidity_percent", 0)
 
-    # Załóżmy, że pierwsze dane z listy jakości powietrza są najważniejsze
     main_pollutant_value = 0
     if air_quality_data:
         main_pollutant_value = air_quality_data[0].get("value", 0)
 
-    # Reguły "predykcji"
     if wind_speed > 25:
         level = "Niski"
         recommendation = "Dobra jakość powietrza. Wiatr skutecznie rozprasza zanieczyszczenia."
@@ -33,7 +27,7 @@ def get_smog_prediction(weather_data: dict, air_quality_data: list):
         level = "Wysoki"
         recommendation = "Zła jakość powietrza. Wysoka wilgotność i słaby wiatr sprzyjają utrzymywaniu się smogu."
         confidence = random.uniform(0.80, 0.92)
-    elif main_pollutant_value > 50:  # Przykładowy próg dla PM2.5
+    elif main_pollutant_value > 50:
         level = "Bardzo wysoki"
         recommendation = "Krytyczna jakość powietrza. Unikaj przebywania na zewnątrz."
         confidence = random.uniform(0.91, 0.99)
@@ -42,10 +36,9 @@ def get_smog_prediction(weather_data: dict, air_quality_data: list):
         recommendation = "Jakość powietrza jest akceptowalna, ale warto zachować ostrożność."
         confidence = random.uniform(0.75, 0.85)
 
-    # Budujemy finalny obiekt z wynikiem predykcji
     prediction_result = {
         "predicted_smog_level": level,
-        "smog_index_normalized": round(random.uniform(20.0, 150.0), 2),  # Fikcyjny wskaźnik
+        "smog_index_normalized": round(random.uniform(20.0, 150.0), 2),
         "model_confidence": round(confidence, 2),
         "recommendation_text": recommendation,
         "model_version": "mock_v0.1"
