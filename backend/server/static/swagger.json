@@ -1,0 +1,33 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Predykcji Smogu",
+    "description": "API do przewidywania poziomu smogu",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5001"
+    }
+  ],
+  "paths": {
+    "/predict": {
+      "get": {
+        "summary": "Przewiduj poziom smogu",
+        "description": "Zwraca predykcję smogu",
+        "responses": {
+          "200": {
+            "description": "Pomyślna predykcja",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
