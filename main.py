@@ -1,6 +1,6 @@
-from API_Scripts.API_OpenAQ import fetch_OpenAQ
-from API_Scripts.API_Pandora import fetch_Pandora
-from API_Scripts.API_TolNet import fetch_TolNet
+from api_scripts.api_openAQ import fetch_OpenAQ
+from api_scripts.api_pandora import fetch_Pandora
+from api_scripts.api_tolNet import fetch_TolNet
 
 
 def main():
