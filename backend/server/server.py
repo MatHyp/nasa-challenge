@@ -1,6 +1,6 @@
-from prediction.neuralnetworkFRmock import get_smog_prediction
-from flask import Flask, jsonify
+from prediction.neuralnetworkFRmock import pollution_assessment
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -20,16 +20,22 @@ app.register_blueprint(swaggerui_blueprint)
 
 @app.route("/predict", methods=["GET"])
 def predict():
-    mock_weather_input = {"wind_speed_kmh": 15, "humidity_percent": 70}
-    mock_air_quality_input = [{"value": 25}]
 
-    smog_prediction = get_smog_prediction(
-        weather_data=mock_weather_input,
-        air_quality_data=mock_air_quality_input
-    )
+    latitude = request.args.get('latitude', type=float)
+    longitude = request.args.get('longitude', type=float)
 
-    return jsonify(smog_prediction)
+    if latitude is None or longitude is None:
+        return jsonify({
+            "error": "Brakujący parametr 'latitude' lub 'longitude'.",
+            "example_usage": "/predict?latitude=50.06&longitude=19.94"
+        }), 400
 
+    result = pollution_assessment(latitude=latitude, longitude=longitude)
+
+    if "error" in result:
+        return jsonify(result), 404
+
+    return jsonify(result)
 
 @app.route("/")
 def index():

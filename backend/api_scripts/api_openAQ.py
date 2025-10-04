@@ -68,7 +68,7 @@ def get_data(latitude, longitude):
     client = OpenAQ(api_key="cd23b0c0a1c6f6ef001ddd3059bc2f6b7ba8fc1979593bf64b3711483ec9fd25")
 
     location_response = client.locations.list(
-        coordinates=(latitude, longitude), radius=10000, limit=100
+        coordinates=(latitude, longitude), radius=10000, limit=1000
     )
 
     if not location_response.results:
