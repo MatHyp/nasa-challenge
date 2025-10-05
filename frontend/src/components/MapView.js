@@ -8,7 +8,11 @@ import {
 } from "react-leaflet";
 import { Sun, Droplets, Wind, Cloud, Eye, EyeOff } from "lucide-react";
 import "leaflet/dist/leaflet.css";
+<<<<<<< HEAD
 import L, { latLng } from "leaflet";
+=======
+import L from "leaflet";
+>>>>>>> d88bffb73dc68c98ba96ca5edbb3c295e7a618b4
 
 const iconUrl = "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png";
 const shadowUrl =
@@ -303,15 +307,25 @@ const MapView = () => {
   const [currentAQI, setCurrentAQI] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
   const [pollutantData, setPollutantData] = useState(null);
+<<<<<<< HEAD
   const [showHeatMap, setShowHeatMap] = useState(false);
+=======
+  const [showHeatMap, setShowHeatMap] = useState(true);
+>>>>>>> d88bffb73dc68c98ba96ca5edbb3c295e7a618b4
 
   const handleLocationSelect = async (lat, lng) => {
     setSelectedLocation({ lat, lng });
 
+<<<<<<< HEAD
     // ✅ API endpoints
     const weatherApi = `http://127.0.0.1:5001/current-weather?latitude=${lat}&longitude=${lng}`;
     const airQualityApi = `http://localhost:5001/air-quality?latitude=${lat}&longitude=${lng}`;
     const airAqiApi = `http://127.0.0.1:5001/aqi?latitude=${lat}&longitude=${lng}`;
+=======
+    // Use interpolated AQI based on location
+    const mockAQI = interpolateAQI(lat, lng);
+    setCurrentAQI(mockAQI);
+>>>>>>> d88bffb73dc68c98ba96ca5edbb3c295e7a618b4
 
     // Use interpolated AQI based on location
     // const mockAQI = interpolateAQI(lat, lng);
@@ -446,7 +460,11 @@ const MapView = () => {
               Global Air Quality Map
             </h1>
           </div>
+<<<<<<< HEAD
           {/* <button
+=======
+          <button
+>>>>>>> d88bffb73dc68c98ba96ca5edbb3c295e7a618b4
             onClick={() => setShowHeatMap(!showHeatMap)}
             className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
@@ -458,7 +476,11 @@ const MapView = () => {
             <span className="text-sm font-medium">
               {showHeatMap ? "Hide" : "Show"} Heat Map
             </span>
+<<<<<<< HEAD
           </button> */}
+=======
+          </button>
+>>>>>>> d88bffb73dc68c98ba96ca5edbb3c295e7a618b4
         </div>
       </nav>
 
